@@ -1,0 +1,39 @@
+{
+  "name": "chatbox_server",
+  "version": "1.0.0",
+  "description": "chat app using server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "dev": "export NODE_ENV=development|| set NODE_ENV=development&& nodemon index.js",
+    "dev:db:migrate": "export NODE_ENV=development|| set NODE_ENV=development&& npx sequelize-cli db:migrate",
+    "staging": "export NODE_ENV=staging|| set NODE_ENV=staging&& nodemon index.js",
+    "production": "export NODE_ENV=production|| set NODE_ENV=production&& nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ishigoDev/chatbox_server.git"
+  },
+  "keywords": [
+    "Socket",
+    "Nodejs"
+  ],
+  "author": "Pranay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ishigoDev/chatbox_server/issues"
+  },
+  "homepage": "https://github.com/ishigoDev/chatbox_server#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "redis": "^4.5.1",
+    "sequelize": "^6.26.0",
+    "sequelize-cli": "^6.5.2"
+  }
+}
