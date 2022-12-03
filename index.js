@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {connectRedis} = require('./utility/redis');
 const db = require('./models/index');
+const router = require('./modules/index');
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
     next();
 });
+app.use(router);
 //health check 
 app.get('/health-check',(req,res)=>{
     res.status(202).json({
