@@ -42,5 +42,15 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   });
+  user.createUser = async (data)=>{
+    const body = data.body;
+    const payload={
+      email:body.email,
+      displayName:body.displayName,
+      password:body.password
+    }
+    const createdUser = await user.create(payload);
+    return createdUser;
+  }
   return user;
 };
