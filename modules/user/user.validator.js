@@ -1,7 +1,10 @@
 const { body, validationResult } = require('express-validator');
+const db = require('../../models/index');
+const user = db.user;
 
 const verifyRules = function (req, res, next) {
     const errors = validationResult(req);
+    console.log(errors);
     if (!errors.isEmpty()) {
         const error = errors.array().shift();
         const payload = {
@@ -37,7 +40,30 @@ const userBody = [
         .trim()        
 ]
 
+const userSign = [
+    body('email')
+        .notEmpty()
+        .withMessage('Email cannot be empty')
+        .isEmail()
+        .trim()
+        .withMessage('Please enter correct email')
+        .custom(async value=>{
+            await user.findByEmail(value).then((user)=>{
+                if(!user){                  
+                    throw new Error(`User Not Found. Please Sign up !`);
+                }else{
+                    return true;
+                }
+            });
+        }),
+    body('password')
+        .notEmpty()
+        .withMessage('Password cannot be empty')
+        .trim()
+]
+
 module.exports = {
     verifyRules,
-    userBody
+    userBody,
+    userSign
 };
