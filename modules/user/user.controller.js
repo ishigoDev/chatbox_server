@@ -3,6 +3,7 @@ const user = db.user;
 const {errorHandler} = require('../../utility/errorHandler');
 const bcrypt = require('bcryptjs')
 const jwt = require('../../utility/jwtToken');
+
 const create = async (req,res)=>{
     try{ 
         const createdUser = await user.createUser(req);
@@ -37,4 +38,15 @@ const signin = async (req,res)=>{
         return res.status(err.statusCode).send(err);
     }
 }
-module.exports = {create,signin}
+const chatroom = async (req,res)=>{
+    try{         
+        console.log(req.user)        
+        return res.status(200).json({
+            status:200,
+        })
+    }catch(error){
+        const err = new errorHandler(error);
+        return res.status(err.statusCode).send(err);
+    }
+}
+module.exports = {create,signin,chatroom}
