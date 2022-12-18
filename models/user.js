@@ -1,7 +1,9 @@
 'use strict';
 const {
-  Model
+  Model,
+  Op
 } = require('sequelize');
+
 const bcrypt = require('bcryptjs')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
@@ -89,6 +91,18 @@ module.exports = (sequelize, DataTypes) => {
       result:result,
       oldSession:oldSession
     }
+  }
+  user.getAllUser = async (data)=>{
+    const whereOptions ={
+      id:{
+        [Op.ne]: data.user.id
+      }
+    }
+    const queryOption = {
+      where:whereOptions
+    }
+    const result = await user.findAll(queryOption)
+    return result;
   }
   return user;
 };
