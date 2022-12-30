@@ -9,7 +9,7 @@ const create = async (req,res)=>{
         const createdUser = await user.createUser(req);
         return res.status(200).json({
             status:200,
-            message:createdUser
+            message:'User Created Successfully ! Redirecting ...'
         })
     }catch(error){
         if(error.name == 'SequelizeUniqueConstraintError'){
