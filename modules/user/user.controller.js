@@ -3,6 +3,7 @@ const user = db.user;
 const {errorHandler} = require('../../utility/errorHandler');
 const bcrypt = require('bcryptjs')
 const jwt = require('../../utility/jwtToken');
+const err = new Error();
 
 const create = async (req,res)=>{
     try{ 

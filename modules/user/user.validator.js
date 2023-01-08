@@ -4,7 +4,6 @@ const user = db.user;
 
 const verifyRules = function (req, res, next) {
     const errors = validationResult(req);
-    console.log(errors);
     if (!errors.isEmpty()) {
         const error = errors.array().shift();
         const payload = {
