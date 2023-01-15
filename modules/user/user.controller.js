@@ -29,10 +29,11 @@ const signin = async (req,res)=>{
             err.statusCode = 403
             throw err
         }
-        const jwtToken =  await jwt.generateToken(userDetail);        
+        const jwtToken =  await jwt.generateToken(userDetail);       
         return res.status(200).json({
             status:200,
-            token:jwtToken
+            token:jwtToken,
+            userId:userDetail.dataValues.id
         })
     }catch(error){
         const err = new errorHandler(error);
