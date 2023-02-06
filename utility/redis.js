@@ -65,16 +65,9 @@ const setExpiryInRedis = function (key, value) {
  * @param {String} key The Key for redis bucket.
  * @return {Promise} the connection handling promise.
  **/
-const getFromRedis = function (key) {
-    return new Promise((resolve, reject) => {
-        client.get(key, function (err, result) {
-            if (!err) {
-                return resolve(JSON.parse(result));
-            } else {
-                return reject(err);
-            }
-        });
-    });
+const getFromRedis = async function (key) {    
+    const getRedis = await client.get(key);
+    return JSON.parse(getRedis);
 };
 
 /**
