@@ -2,9 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {connectRedis} = require('./utility/redis');
 const db = require('./models/index');
-
-
+const router = require('./modules/index');
 const app = express();
+const http = require('http').createServer(app);
+const {init} = require('./utility/socket')
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -16,6 +19,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
     next();
 });
+app.use(router);
 //health check 
 app.get('/health-check',(req,res)=>{
     res.status(202).json({
@@ -32,6 +36,7 @@ db.sequelize.sync().then(req => {
             app.use((req, res) => {
                 res.status(404).json({ message: 'Route Not Found !' });
             });            
+            init(http);
             console.log(`Server is running on the port ${process.env.PORT}`);
         })
     }).catch((err) => {
