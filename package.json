@@ -9,7 +9,9 @@
     "dev": "export NODE_ENV=development|| set NODE_ENV=development&& nodemon index.js",
     "dev:db:migrate": "export NODE_ENV=development|| set NODE_ENV=development&& npx sequelize-cli db:migrate",
     "staging": "export NODE_ENV=staging|| set NODE_ENV=staging&& nodemon index.js",
-    "production": "export NODE_ENV=production|| set NODE_ENV=production&& nodemon index.js"
+    "production": "export NODE_ENV=production|| set NODE_ENV=production&& nodemon index.js",
+    "lint": "eslint .  --ext .js",
+    "lint-fix": "eslint --fix .  --ext .js"
   },
   "repository": {
     "type": "git",
@@ -40,5 +42,8 @@
     "sequelize-cli": "^6.5.2",
     "socket.io": "^4.5.4",
     "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0"
   }
 }
