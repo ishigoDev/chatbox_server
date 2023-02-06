@@ -98,7 +98,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
     const queryOption = {
-      where:whereOptions
+      where:whereOptions,
+      attributes:['displayName','email','session']
     }
     const result = await user.findAll(queryOption)
     return result;
