@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongs(models.user,{
+      this.belongsTo(models.user,{
         as:'created',
         foreignKey:'created_by'
-      })
+      }),
       this.hasMany(models.messages,{
         as:'messages',
         foreignKey:'chatroom_id'
