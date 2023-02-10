@@ -3,6 +3,7 @@ const {
   Model,
   Op
 } = require('sequelize');
+let allModels;
 const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
@@ -13,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.chatroom,{
+        as: 'chat',
+        foreignKey:'created_by',
+      })
     }
   }
   user.init({
@@ -47,6 +52,9 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   });
+  user.registerAllModels = function(models) {
+    allModels = models;
+  };
   user.createUser = async (data)=>{
     const body = data.body;
     const payload={

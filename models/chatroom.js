@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+let allModels;
 module.exports = (sequelize, DataTypes) => {
   class chatroom extends Model {
     /**
@@ -11,14 +12,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // this.belongsTo(models.users,{
-      //   as:'created',
-      //   foreignKey:'created_by'
-      // })
-      // this.belongsTo(models.users,{
-      //   as:'other_user',
-      //   foreignKey:'members'
-      // })
+      this.belongs(models.user,{
+        as:'created',
+        foreignKey:'created_by'
+      })
+      this.hasMany(models.messages,{
+        as:'messages',
+        foreignKey:'chatroom_id'
+      })
     }
   }
   chatroom.init({
@@ -47,9 +48,16 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'chatroom',
     paranoid: true,
+    tableName:'chatrooms',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     deletedAt: 'deleted_at'
   });
+  chatroom.registerAllModels = function(models) {
+    allModels = models;
+  };
+  chatroom.createMember = async function(data){
+    return 'hello';
+  }
   return chatroom;
 };
