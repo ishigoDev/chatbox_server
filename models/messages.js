@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+let allModels;
 module.exports = (sequelize, DataTypes) => {
   class messages extends Model {
     /**
@@ -11,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user,{
-        as:'sender',
-        foreignKey:'created_by'
+      this.belongsTo(models.user, {
+        as: 'sender',
+        foreignKey: 'sender_id'
       })
-      this.belongsTo(models.chatroom,{
-        as:'chatroom',
-        foreignKey:'chatroom_id'
+      this.belongsTo(models.chatroom, {
+        as: 'chatroom',
+        foreignKey: 'chatroom_id'
       })
     }
   }
@@ -26,39 +27,45 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue:sequelize.literal('uuid_generate_v4()'),
+      defaultValue: sequelize.literal('uuid_generate_v4()'),
     },
     chatroom_id: {
       type: DataTypes.UUID,
-      allowNull:false,
+      allowNull: false,
       references: {
         model: 'chatroom',
         key: 'id',
       },
     },
-    sender_id:{
-      type:DataTypes.UUID,
-      allowNull:false,
-      references:{
-        model:'users',
-        key:'id'
+    sender_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
       }
     },
-    message:{
+    message: {
       type: DataTypes.STRING,
-      allowNull:false
-    },
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE
+      allowNull: false
     }
   }, {
     sequelize,
     modelName: 'messages',
+    tableName: 'messages',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   });
+  messages.registerAllModels = function (models) {
+    allModels = models;
+  };
+  messages.saveMessage = async function (chatroom_id, sender_id, message) {
+    const result = await messages.create({
+      chatroom_id: chatroom_id,
+      sender_id: sender_id,
+      message: message,
+    });
+    return result;
+  }
   return messages;
 };
