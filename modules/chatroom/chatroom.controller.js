@@ -21,4 +21,17 @@ const chatMessage = async (req,res)=>{
         return res.status(err.statusCode).send(err);   
     }
 }
-module.exports = {chatMessage}
+
+const fetchMessage = async (req,res)=>{
+    try{ 
+        const fetched = await chatroom.fetchMessage(req);
+        return res.status(200).json({
+            status:200,
+            message:fetched
+        })
+    }catch(error){     
+        const err = new errorHandler(error);
+        return res.status(err.statusCode).send(err);   
+    }
+}
+module.exports = {chatMessage,fetchMessage}

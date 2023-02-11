@@ -96,8 +96,7 @@ module.exports = (sequelize, DataTypes) => {
     const { body } = data;
     const { sender, receiver } = data.params;
     const check = await this.checkChatRoomId(sender, receiver);
-    let chatroomRow;
-    let chatRoomId;
+    let chatroomRow,chatRoomId;    
     if (!check) {
       chatroomRow = await chatroom.create({
         created_by: sender,
@@ -109,6 +108,23 @@ module.exports = (sequelize, DataTypes) => {
     }
     const messageCreated = await allModels.messages.saveMessage(chatRoomId, sender, body.message);    
     return messageCreated;
+  }
+  chatroom.fetchMessage = async function(data){
+    const { sender, receiver } = data.params;    
+    const check = await this.checkChatRoomId(sender, receiver);
+    const chatRoomId =  check.dataValues.id;
+    const messages = await allModels.messages.findAll({
+      where:{
+        chatroom_id:chatRoomId
+      },
+      include:[
+        {
+          model:allModels.user,
+          as:'sender'
+        }
+      ]
+    })
+    return messages;
   }
   return chatroom;
 };
