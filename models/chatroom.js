@@ -112,6 +112,9 @@ module.exports = (sequelize, DataTypes) => {
   chatroom.fetchMessage = async function(data){
     const { sender, receiver } = data.params;    
     const check = await this.checkChatRoomId(sender, receiver);
+    if(!check){
+      return [];
+    }
     const chatRoomId =  check.dataValues.id;
     const messages = await allModels.messages.findAll({
       where:{
