@@ -123,9 +123,10 @@ module.exports = (sequelize, DataTypes) => {
       include:[
         {
           model:allModels.user,
-          as:'sender'
+          as:'sender',
+          attributes: {exclude: ['password' , 'created_at','updated_at','id']},          
         }
-      ]
+      ],
     })
     return messages;
   }
