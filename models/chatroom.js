@@ -127,6 +127,7 @@ module.exports = (sequelize, DataTypes) => {
           attributes: {exclude: ['password' , 'created_at','updated_at','id']},          
         }
       ],
+      attributes: {exclude: ['updated_at']}
     })
     return messages;
   }
