@@ -5,11 +5,12 @@ const err = new Error();
 
 const chatMessage = async (req,res)=>{
     try{ 
-        const created = await chatroom.createMember(req);
+        const created = await chatroom.createMember(req);        
         if(created){
             return res.status(200).json({
                 status:200,
-                message:'Message Sent !'
+                message:'Message Sent !',
+                message:created
             })
         }else{
             err.message = 'Somethin Went Wrong ! Please try again !'
