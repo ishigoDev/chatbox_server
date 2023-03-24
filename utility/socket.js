@@ -4,36 +4,42 @@ let activeUsers = [];
 const db = require('../models/index')
 const user = db.user;
 
-function init(http){    
-    io = require('socket.io')(http, {        
+function init(http) {
+    io = require('socket.io')(http, {
         cors: {
-          origin: '*',
-          methods: ['GET', 'POST'],
-          credentials: true,
+            origin: '*',
+            methods: ['GET', 'POST'],
+            credentials: true,
         },
         allowEIO3: true,
     })
     io.on('connection', (socket) => {
         socket.on('new-user-add', async (newUserId) => {
-            const userDetail = await user.findByPk(newUserId) 
-            if(!activeUsers.some(user => user.id === newUserId)){                             
+            const userDetail = await user.findByPk(newUserId)
+            if (!activeUsers.some(user => user.id === newUserId)) {
                 activeUsers.push({
-                    id:newUserId,
+                    id: newUserId,
                     name: userDetail.dataValues.displayName,
-                    socketId:socket.id
+                    socketId: socket.id
                 })
             }
-            io.emit('get-users',activeUsers)
+            io.emit('get-users', activeUsers)
+        })
+        socket.on('send-message', (data) => {
+            const { receiverId } = data;
+            const user = activeUsers.find(user => user.id === receiverId);
+            if (user) {
+                io.to(user.socketId).emit('receive-message', data.activeChatRoom);
+            }
         })
         socket.on('disconnect', () => {
-            activeUsers = activeUsers.filter(user => user.socketId!== socket.id)
-            console.log('user disconnected',activeUsers);
-            io.emit('get-users',activeUsers)
+            activeUsers = activeUsers.filter(user => user.socketId !== socket.id)
+            io.emit('get-users', activeUsers)
         })
-    });    
+    });
 }
 
 
-module.exports ={
+module.exports = {
     init
 }
