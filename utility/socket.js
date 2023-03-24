@@ -33,7 +33,7 @@ function init(http) {
             }
         })
         socket.on('typing', (data) => {
-            const { receiverId } = data;            
+            const { receiverId } = data;
             const user = activeUsers.find(user => user.id === receiverId);
             if (user)
                 io.to(user.socketId).emit('typing-user', data.typing);
