@@ -32,6 +32,12 @@ function init(http) {
                 io.to(user.socketId).emit('receive-message', data.activeChatRoom);
             }
         })
+        socket.on('typing', (data) => {
+            const { receiverId } = data;            
+            const user = activeUsers.find(user => user.id === receiverId);
+            if (user)
+                io.to(user.socketId).emit('typing-user', data.typing);
+        })
         socket.on('disconnect', () => {
             activeUsers = activeUsers.filter(user => user.socketId !== socket.id)
             io.emit('get-users', activeUsers)
