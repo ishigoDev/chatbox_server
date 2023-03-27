@@ -7,6 +7,6 @@ router.post('/create',rule.userBody,rule.verifyRules,userController.create)
 //Sign In User
 router.post('/sign-in',rule.userSign,rule.verifyRules,userController.signin);
 //ChatRoom 
-router.post('/chatroom',auth.verifyToken,userController.chatroom)
+router.get('/chatroom',auth.verifyToken,userController.chatroom)
 
 module.exports = router;
