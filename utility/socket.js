@@ -38,8 +38,12 @@ function init(http) {
             if (user)
                 io.to(user.socketId).emit('typing-user', data.typing);
         })
-        socket.on('disconnect', () => {
+        socket.on('disconnect', () => {            
+            const disconnect_user = activeUsers.filter(user => user.socketId === socket.id)
             activeUsers = activeUsers.filter(user => user.socketId !== socket.id)
+            disconnect_user.map(userDetail => {
+                console.log(user.saveLastSeen(userDetail.id));
+            });            
             io.emit('get-users', activeUsers)
         })
     });
