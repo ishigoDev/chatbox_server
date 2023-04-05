@@ -105,10 +105,10 @@ module.exports = (sequelize, DataTypes) => {
       oldSession:oldSession
     }
   }
-  user.getAllUser = async (data)=>{
+  user.getAllUser = async (id)=>{
     const whereOptions ={
       id:{
-        [Op.ne]: data.user.id
+        [Op.ne]: id 
       }
     }
     const queryOption = {
