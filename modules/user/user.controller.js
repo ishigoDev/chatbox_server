@@ -42,7 +42,7 @@ const signin = async (req,res)=>{
 }
 const chatroom = async (req,res)=>{
     try{         
-        const users = await user.getAllUser(req);     
+        const users = await user.getAllUser(req.user.id);     
         return res.status(200).json({
             status:200,
             users:users

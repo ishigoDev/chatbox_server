@@ -1,7 +1,8 @@
 'use strict';
 const {
   Model,
-  Op
+  Op,
+  Sequelize
 } = require('sequelize');
 let allModels;
 const bcrypt = require('bcryptjs');
@@ -44,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     session:{
       type:DataTypes.STRING(255),
       allowNull:true
+    },  
+    last_seen:{
+      type:DataTypes.DATE,
+      allowNull:true
     }
   }, {
     sequelize,
@@ -60,9 +65,10 @@ module.exports = (sequelize, DataTypes) => {
     const payload={
       email:body.email,
       displayName:body.displayName,
-      password:body.password
+      password:body.password,
+      last_seen:sequelize.literal('CURRENT_TIMESTAMP'),
     }
-    const createdUser = await user.create(payload);
+    const createdUser = await user.create(payload);    
     return createdUser;
   }
   user.findByEmail = async (data)=>{        
@@ -99,18 +105,35 @@ module.exports = (sequelize, DataTypes) => {
       oldSession:oldSession
     }
   }
-  user.getAllUser = async (data)=>{
+  user.getAllUser = async (id)=>{
     const whereOptions ={
       id:{
-        [Op.ne]: data.user.id
+        [Op.ne]: id 
       }
     }
     const queryOption = {
       where:whereOptions,
-      attributes:['displayName','email','session','id']
+      attributes:['displayName','email','session','id','last_seen']
     }
     const result = await user.findAll(queryOption)
     return result;
+  }
+  user.saveLastSeen = async (id) =>{
+    const whereOptions ={
+      id:id
+    }
+    const result = await user.update({
+      last_seen:sequelize.literal('CURRENT_TIMESTAMP')
+    },{where:whereOptions});
+    if(!result){
+      const err = new Error()
+      err.statusCode = 422
+      err.message = `Something went Wrong !`
+      throw err
+    }
+    return {
+      result:result,     
+    }
   }
   return user;
 };
