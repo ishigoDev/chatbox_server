@@ -8,9 +8,12 @@ const err = new Error();
 const create = async (req,res)=>{
     try{ 
         const createdUser = await user.createUser(req);
+        delete createdUser.dataValues.password
+        delete createdUser.dataValues.updated_at        
         return res.status(200).json({
             status:200,
-            message:'User Created Successfully ! Redirecting ...'
+            message:'User Created Successfully ! Redirecting ...',
+            createdUser:createdUser
         })
     }catch(error){
         if(error.name == 'SequelizeUniqueConstraintError'){
