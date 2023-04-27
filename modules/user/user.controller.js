@@ -55,4 +55,17 @@ const chatroom = async (req,res)=>{
         return res.status(err.statusCode).send(err);
     }
 }
-module.exports = {create,signin,chatroom}
+const signOut = async (req,res) =>{
+    try{
+        const signOut = await user.signOut(req);
+        if(signOut)
+            return res.status(200).json({
+                status:200,
+                message:'User Logged Out Successfully',
+            })
+    }catch(error){
+        const err = new errorHandler(error);
+        return res.status(err.statusCode).send(err);
+    }
+}
+module.exports = {create,signin,chatroom,signOut}

@@ -6,7 +6,7 @@ const chat = require('./chatroom.controller');
 route.post('/:sender/:receiver',auth.verifyToken,chat.chatMessage)
 
 //fetch-chatroom-message
-route.get('/:sender/:receiver',chat.fetchMessage);
+route.get('/:sender/:receiver',auth.verifyToken,chat.fetchMessage);
 
 
 module.exports = route;
