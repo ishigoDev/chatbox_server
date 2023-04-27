@@ -6,6 +6,7 @@ const {
 } = require('sequelize');
 let allModels;
 const bcrypt = require('bcryptjs');
+const {delFromRedis} = require('../utility/redis')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -134,6 +135,22 @@ module.exports = (sequelize, DataTypes) => {
     return {
       result:result,     
     }
+  }
+  user.signOut = async (data) =>{
+    const userId = data.user.id;
+    const redisId = data.user.redisId;
+    const whereOptions = {
+      id:userId
+    }
+    delFromRedis(redisId)
+    const result = await user.update({session:null},{where:whereOptions});    
+    if(!result){
+      const err = new Error()
+      err.statusCode = 422
+      err.message = `Something went Wrong !`
+      throw err
+    }
+    return true ;
   }
   return user;
 };
